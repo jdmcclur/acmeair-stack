@@ -24,14 +24,12 @@ RUN  /project/util/check_version build
 
 WORKDIR /project/
 
-RUN mkdir -p /mvn/repository
-# Let's see the command we're hiding within the next line
-RUN mvn -e help:evaluate -Dexpression=maven.version -DforceStdout
-RUN mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout)
-RUN mvn -B -Pstack-image-package -Dmaven.repo.local=/mvn/repository liberty:install-server install dependency:go-offline
-RUN mvn -Dmaven.repo.local=/mvn/repository -B -f preload-m2-pom.xml liberty:install-server dependency:go-offline 
-RUN chmod -R 777 /opt/ol && chmod -R 777 /mvn/repository
-
+RUN mkdir -p /mvn/repository && \
+ mvn -e help:evaluate -Dexpression=maven.version -DforceStdout && \
+ mvn -B -Dmaven.repo.local=/mvn/repository -N io.takari:maven:wrapper -Dmaven=$(mvn help:evaluate -Dexpression=maven.version -q -DforceStdout) && \
+ mvn -B -Pstack-image-package -Dmaven.repo.local=/mvn/repository liberty:install-server install dependency:go-offline && \
+ mvn -Dmaven.repo.local=/mvn/repository -B -f preload-m2-pom.xml liberty:install-server dependency:go-offline  && \
+ chmod -R 777 /opt/ol && chmod -R 777 /mvn/repository
 
 WORKDIR /project/user-app
 

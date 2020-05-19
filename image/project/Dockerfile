@@ -1,6 +1,6 @@
 # Step 1: Build the user's application
 #FROM kabanero/ubi8-maven:0.9.0 as compile
-FROM dev.local/appsody/acmeair-stack:0.1.0 as compile
+FROM jdmcclur/acmeair-stack:0.1.0 as compile
 
 USER 0
 
